@@ -1,0 +1,14 @@
+# Zero-cost local MongoDB — run `docker compose up -d` and you're done.
+# Data persists in the `mongo-data` volume between restarts.
+services:
+  mongo:
+    image: mongo:7
+    container_name: brush-bloom-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:

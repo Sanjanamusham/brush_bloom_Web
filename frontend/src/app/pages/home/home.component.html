@@ -1,0 +1,61 @@
+<section class="hero section-warm">
+  <div class="container hero-inner">
+    <h1>Handcrafted Lippan art from the heart of Kutch</h1>
+    <p class="muted">
+      Traditional Gujarati mirror-work mud art, made by hand — for walls that deserve a story.
+    </p>
+  </div>
+</section>
+
+<section class="container">
+  <div class="toolbar">
+    <div class="filters">
+      <select [(ngModel)]="selectedCategory" (ngModelChange)="onFilterChange()">
+        <option value="">All Categories</option>
+        @for (c of categories; track c) {
+          <option [value]="c">{{ c }}</option>
+        }
+      </select>
+      <select [(ngModel)]="sort" (ngModelChange)="onFilterChange()">
+        <option value="">Sort: Featured</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+        <option value="newest">Newest</option>
+      </select>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <p class="muted">Loading products…</p>
+  } @else if (error()) {
+    <p class="error">{{ error() }}</p>
+  } @else if (products().length === 0) {
+    <div class="empty-state">
+      <h3>No products found</h3>
+      <p class="muted">Try a different category or check back soon.</p>
+    </div>
+  } @else {
+    <div class="grid">
+      @for (p of products(); track p.id) {
+        <a class="card product-card" [routerLink]="['/art', p.slug]">
+          <div class="thumb">
+            @if (p.images[0]) {
+              <img [src]="resolveImageUrl(p.images[0])" [alt]="p.name" loading="lazy" />
+            } @else {
+              <div class="thumb-placeholder"></div>
+            }
+            @if (!p.inStock) {
+              <span class="badge out-badge">Out of stock</span>
+            }
+          </div>
+          <div class="info">
+            <span class="badge">{{ p.category }}</span>
+            <h3>{{ p.name }}</h3>
+            <p class="muted desc">{{ p.description }}</p>
+            <p class="price">{{ formatPrice(p.price) }}</p>
+          </div>
+        </a>
+      }
+    </div>
+  }
+</section>

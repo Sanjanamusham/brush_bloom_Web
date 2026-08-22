@@ -1,0 +1,19 @@
+<div class="container about-page">
+  <h1>Our Story</h1>
+  <p>
+    {{ siteConfig.name }} began as a small family workshop in Kutch, Gujarat, keeping the
+    centuries-old tradition of Lippan (mirror-work mud art) alive — one hand-sculpted piece
+    at a time. Every panel starts as raw clay and cow-dung base, shaped into intricate motifs,
+    then finished with hundreds of hand-cut mirror chips that catch the light.
+    <!-- Placeholder — replace with your real brand story. -->
+  </p>
+
+  <h2>Get in touch</h2>
+  <div class="contact-row">
+    <a [href]="whatsapp" target="_blank" rel="noopener" class="btn btn-accent">Chat on WhatsApp</a>
+    <a [href]="siteConfig.instagram" target="_blank" rel="noopener" class="btn btn-outline">
+      {{ siteConfig.instagramHandle }}
+    </a>
+    <a [href]="'mailto:' + siteConfig.email" class="btn btn-outline">{{ siteConfig.email }}</a>
+  </div>
+</div>

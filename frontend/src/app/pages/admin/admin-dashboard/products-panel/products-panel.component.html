@@ -1,0 +1,131 @@
+<div class="panel">
+  <div class="panel-header">
+    <h2>Products</h2>
+    <button type="button" class="btn btn-accent" (click)="startCreate()">+ New Product</button>
+  </div>
+
+  @if (showForm()) {
+    <form [formGroup]="form" (ngSubmit)="submit()" class="card product-form">
+      <h3>{{ editingId() ? 'Edit Product' : 'New Product' }}</h3>
+
+      <div class="form-grid">
+        <div class="field">
+          <label>Name</label>
+          <input type="text" formControlName="name" />
+          @if (form.controls.name.touched && form.controls.name.invalid) {
+            <span class="error">Name is required (2-140 characters).</span>
+          }
+        </div>
+        <div class="field">
+          <label>Slug (auto-filled from Name — edit only if you want a custom URL)</label>
+          <input type="text" formControlName="slug" />
+          @if (form.controls.slug.touched && form.controls.slug.invalid) {
+            <span class="error">Lowercase letters, numbers and dashes only.</span>
+          }
+        </div>
+        <div class="field full">
+          <label>Description</label>
+          <textarea rows="3" formControlName="description"></textarea>
+        </div>
+        <div class="field">
+          <label>Price (₹)</label>
+          <input type="number" min="0" formControlName="price" />
+        </div>
+        <div class="field">
+          <label>Dimensions</label>
+          <input type="text" formControlName="dimensions" placeholder="e.g. 18 x 18 inches" />
+        </div>
+        <div class="field">
+          <label>Category</label>
+          <select formControlName="category">
+            @for (c of categories; track c) {
+              <option [value]="c">{{ c }}</option>
+            }
+          </select>
+        </div>
+        <div class="field">
+          <label>Sort Order</label>
+          <input type="number" min="0" formControlName="sortOrder" />
+        </div>
+        <div class="field full">
+          <label>Product Images (up to 8, JPG/PNG/WEBP/GIF, 5MB each)</label>
+          <input
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/gif"
+            multiple
+            (change)="onFilesSelected($event)"
+            [disabled]="uploading() || images().length >= 8"
+          />
+          @if (uploading()) {
+            <span class="muted small">Uploading…</span>
+          }
+          @if (uploadError()) {
+            <span class="error">{{ uploadError() }}</span>
+          }
+
+          @if (images().length > 0) {
+            <div class="image-previews">
+              @for (img of images(); track img; let i = $index) {
+                <div class="preview">
+                  <img [src]="resolveImageUrl(img)" alt="Product image preview" />
+                  <button type="button" class="remove-preview" (click)="removeImage(i)" aria-label="Remove image">
+                    ×
+                  </button>
+                </div>
+              }
+            </div>
+          }
+        </div>
+        <div class="field checkboxes">
+          <label><input type="checkbox" formControlName="inStock" /> In stock</label>
+          <label><input type="checkbox" formControlName="featured" /> Featured</label>
+        </div>
+      </div>
+
+      @if (error()) {
+        <p class="error">{{ error() }}</p>
+      }
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-accent">{{ editingId() ? 'Save Changes' : 'Create Product' }}</button>
+        <button type="button" class="btn btn-outline" (click)="cancel()">Cancel</button>
+      </div>
+    </form>
+  }
+
+  @if (loading()) {
+    <p class="muted">Loading products…</p>
+  } @else if (products().length === 0) {
+    <div class="empty-state">
+      <h3>No products yet</h3>
+      <p class="muted">Create your first product to see it here and on the storefront.</p>
+    </div>
+  } @else {
+    <div class="table">
+      <div class="table-row table-head">
+        <span>Product</span>
+        <span>Category</span>
+        <span>Price</span>
+        <span>Stock</span>
+        <span></span>
+      </div>
+      @for (p of products(); track p.id) {
+        <div class="table-row">
+          <span class="prod-name">
+            {{ p.name }}
+            @if (p.featured) {
+              <span class="badge">Featured</span>
+            }
+          </span>
+          <span>{{ p.category }}</span>
+          <span class="price">{{ formatPrice(p.price) }}</span>
+          <span>{{ p.inStock ? 'In stock' : 'Out of stock' }}</span>
+          <span class="row-actions">
+            <button type="button" class="btn btn-outline" (click)="startEdit(p)">Edit</button>
+            <button type="button" class="btn btn-outline danger" (click)="remove(p)">Delete</button>
+          </span>
+        </div>
+      }
+    </div>
+  }
+</div>

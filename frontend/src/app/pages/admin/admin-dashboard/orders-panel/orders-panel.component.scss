@@ -1,0 +1,13 @@
+.filters { display: flex; gap: 10px; margin-bottom: 20px; }
+.filters input { flex: 1; padding: 10px 12px; border: 1px solid var(--color-border); border-radius: var(--radius); }
+.filters select { padding: 10px 12px; border: 1px solid var(--color-border); border-radius: var(--radius); }
+
+.order-list { display: flex; flex-direction: column; gap: 14px; }
+.order-row { padding: 16px; }
+.order-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.small { font-size: 0.85rem; margin-bottom: 8px; }
+.items { padding-left: 18px; margin: 8px 0; font-size: 0.9rem; }
+.note { font-size: 0.85rem; background: var(--color-bg-warm); padding: 8px 10px; border-radius: 8px; }
+.controls { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+.controls select { padding: 8px 10px; border: 1px solid var(--color-border); border-radius: var(--radius); }
+.delivery-note-input { flex: 1; min-width: 200px; padding: 8px 10px; border: 1px solid var(--color-border); border-radius: var(--radius); }

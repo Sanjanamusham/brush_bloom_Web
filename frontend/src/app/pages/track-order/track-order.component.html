@@ -1,0 +1,56 @@
+<div class="container track-page">
+  <h1>Track Your Order</h1>
+  <p class="muted">No account needed — enter your Order ID and phone number.</p>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="track-form">
+    <div class="field">
+      <label>Order ID</label>
+      <input type="text" formControlName="orderCode" placeholder="LP-20260817-0001" />
+      @if (form.controls.orderCode.touched && form.controls.orderCode.invalid) {
+        <span class="error">Order ID is required.</span>
+      }
+    </div>
+    <div class="field">
+      <label>Phone Number</label>
+      <input type="tel" formControlName="phone" placeholder="e.g. 9876543210" />
+      @if (form.controls.phone.touched && form.controls.phone.invalid) {
+        <span class="error">Enter a valid phone number.</span>
+      }
+    </div>
+    <button type="submit" class="btn" [disabled]="loading()">
+      {{ loading() ? 'Searching…' : 'Track Order' }}
+    </button>
+  </form>
+
+  @if (searched()) {
+    @if (order(); as o) {
+      <div class="card result">
+        <div class="result-header">
+          <h3>{{ o.orderCode }}</h3>
+          <span class="badge status">{{ o.status }}</span>
+        </div>
+        <p class="muted">Placed on {{ o.createdAt | date: 'mediumDate' }}</p>
+
+        <ul class="items">
+          @for (item of o.items; track item.name) {
+            <li>{{ item.name }} × {{ item.quantity }} — {{ formatPrice(item.unitPrice * item.quantity) }}</li>
+          }
+        </ul>
+
+        <p class="price">Estimated total: {{ formatPrice(o.estimatedTotal) }}</p>
+
+        @if (o.deliveryNote) {
+          <div class="delivery-note">
+            <strong>Note from us:</strong>
+            <p>{{ o.deliveryNote }}</p>
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="empty-state">
+        <h3>We couldn't find that order</h3>
+        <p class="muted">Please check your Order ID and phone number and try again.</p>
+      </div>
+    }
+  }
+</div>

@@ -1,0 +1,96 @@
+<div class="container cart-page">
+  @if (result(); as r) {
+    <div class="empty-state success">
+      <h2>Order request sent 🎉</h2>
+      <p>Your Order ID:</p>
+      <p class="order-code">{{ r.orderCode }}</p>
+      <p class="muted">Save this Order ID to track your order.</p>
+      <a [href]="r.whatsapp" target="_blank" rel="noopener" class="btn btn-accent">
+        Continue on WhatsApp
+      </a>
+      <br /><br />
+      <a routerLink="/" class="btn btn-outline">Continue Shopping</a>
+    </div>
+  } @else {
+    <h1>Your Cart</h1>
+
+    @if (cart.lines().length === 0) {
+      <div class="empty-state">
+        <h3>Your cart is empty</h3>
+        <p class="muted">Browse the collection and add a piece you love.</p>
+        <a routerLink="/" class="btn">Shop Now</a>
+      </div>
+    } @else {
+      <div class="lines">
+        @for (line of cart.lines(); track line.productId) {
+          <div class="line">
+            <div class="thumb">
+              @if (line.image) {
+                <img [src]="resolveImageUrl(line.image)" [alt]="line.name" />
+              }
+            </div>
+            <div class="line-info">
+              <a [routerLink]="['/art', line.slug]">{{ line.name }}</a>
+              <p class="price">{{ formatPrice(line.price) }}</p>
+            </div>
+            <div class="qty-controls">
+              <button type="button" class="btn btn-outline" (click)="updateQty(line.productId, line.quantity - 1)">-</button>
+              <span>{{ line.quantity }}</span>
+              <button type="button" class="btn btn-outline" (click)="updateQty(line.productId, line.quantity + 1)">+</button>
+            </div>
+            <button type="button" class="remove-btn" (click)="remove(line.productId)">Remove</button>
+          </div>
+        }
+      </div>
+
+      <div class="summary">
+        <p class="subtotal">
+          Estimated total: <span class="price">{{ formatPrice(cart.subtotal()) }}</span>
+        </p>
+        <p class="muted small">
+          Estimated total — final price & delivery cost confirmed on WhatsApp.
+        </p>
+
+        @if (!showForm()) {
+          <button type="button" class="btn btn-accent" (click)="openForm()">Submit Order Request</button>
+        } @else {
+          <form [formGroup]="form" (ngSubmit)="submitOrder()" class="order-form">
+            <div class="field">
+              <label>Full Name</label>
+              <input type="text" formControlName="customerName" />
+              @if (form.controls.customerName.touched && form.controls.customerName.invalid) {
+                <span class="error">Please enter your full name (2-100 characters).</span>
+              }
+            </div>
+            <div class="field">
+              <label>Phone Number</label>
+              <input type="tel" formControlName="phone" placeholder="e.g. 9876543210" />
+              @if (form.controls.phone.touched && form.controls.phone.invalid) {
+                <span class="error">Enter a valid phone number.</span>
+              }
+            </div>
+            <div class="field">
+              <label>Delivery Address</label>
+              <textarea rows="3" formControlName="address"></textarea>
+              @if (form.controls.address.touched && form.controls.address.invalid) {
+                <span class="error">Address should be at least 10 characters.</span>
+              }
+            </div>
+            <div class="field">
+              <label>Note (optional)</label>
+              <textarea rows="2" formControlName="note"></textarea>
+            </div>
+
+            @if (submitError()) {
+              <p class="error">{{ submitError() }}</p>
+            }
+
+            <button type="submit" class="btn btn-accent" [disabled]="submitting()">
+              {{ submitting() ? 'Submitting…' : 'Confirm Order Request' }}
+            </button>
+          </form>
+        }
+      </div>
+    }
+  }
+</div>

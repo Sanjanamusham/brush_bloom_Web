@@ -1,0 +1,63 @@
+<div class="container detail">
+  @if (loading()) {
+    <p class="muted">Loading…</p>
+  } @else if (notFound()) {
+    <div class="empty-state">
+      <h3>Product not found</h3>
+      <a routerLink="/" class="btn">Back to Shop</a>
+    </div>
+  } @else {
+    @if (product(); as p) {
+      <div class="grid-2">
+        <div class="gallery">
+          <div class="main-image">
+            @if (p.images[activeImage()]) {
+              <img [src]="resolveImageUrl(p.images[activeImage()])" [alt]="p.name" />
+            } @else {
+              <div class="thumb-placeholder"></div>
+            }
+          </div>
+          @if (p.images.length > 1) {
+            <div class="thumbs">
+              @for (img of p.images; track img; let i = $index) {
+                <button
+                  type="button"
+                  class="thumb-btn"
+                  [class.active]="i === activeImage()"
+                  (click)="selectImage(i)"
+                >
+                  <img [src]="resolveImageUrl(img)" [alt]="p.name + ' image ' + (i + 1)" />
+                </button>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="info">
+          <span class="badge">{{ p.category }}</span>
+          <h1>{{ p.name }}</h1>
+          <p class="price large">{{ formatPrice(p.price) }}</p>
+          <p class="muted">{{ p.dimensions }}</p>
+          <p class="desc">{{ p.description }}</p>
+
+          @if (!p.inStock) {
+            <p class="out-of-stock">Currently out of stock</p>
+          } @else {
+            <div class="qty-row">
+              <button type="button" class="btn btn-outline" (click)="changeQuantity(-1)">-</button>
+              <span class="qty">{{ quantity() }}</span>
+              <button type="button" class="btn btn-outline" (click)="changeQuantity(1)">+</button>
+            </div>
+            <button type="button" class="btn btn-accent add-btn" (click)="addToCart()">
+              {{ added() ? 'Added ✓' : 'Add to Cart' }}
+            </button>
+            <p class="note muted">
+              Adding to cart does not charge anything. You'll review your order and submit a
+              request — final price & delivery are confirmed on WhatsApp.
+            </p>
+          }
+        </div>
+      </div>
+    }
+  }
+</div>

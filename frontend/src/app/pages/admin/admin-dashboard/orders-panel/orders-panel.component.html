@@ -1,0 +1,69 @@
+<div class="panel">
+  <div class="filters">
+    <input
+      type="text"
+      placeholder="Search by Order ID or phone…"
+      [(ngModel)]="search"
+      (ngModelChange)="load()"
+    />
+    <select [(ngModel)]="statusFilter" (ngModelChange)="load()">
+      <option value="">All statuses</option>
+      @for (s of statuses; track s) {
+        <option [value]="s">{{ s }}</option>
+      }
+    </select>
+  </div>
+
+  @if (loading()) {
+    <p class="muted">Loading orders…</p>
+  } @else if (orders().length === 0) {
+    <div class="empty-state">
+      <h3>No orders found</h3>
+    </div>
+  } @else {
+    <div class="order-list">
+      @for (o of orders(); track o.id) {
+        <div class="card order-row">
+          <div class="order-top">
+            <div>
+              <strong>{{ o.orderCode }}</strong>
+              <span class="muted"> — {{ o.createdAt | date: 'medium' }}</span>
+            </div>
+            <span class="price">{{ formatPrice(o.estimatedTotal) }}</span>
+          </div>
+
+          <p class="muted small">{{ o.customerName }} · {{ o.phone }} · {{ o.address }}</p>
+
+          <ul class="items">
+            @for (item of o.items; track item.productName) {
+              <li>{{ item.productName }} × {{ item.quantity }}</li>
+            }
+          </ul>
+
+          @if (o.note) {
+            <p class="note"><strong>Customer note:</strong> {{ o.note }}</p>
+          }
+
+          <div class="controls">
+            <select
+              [ngModel]="o.status"
+              (ngModelChange)="onStatusChange(o, $event)"
+              [disabled]="savingId() === o.id"
+            >
+              @for (s of statuses; track s) {
+                <option [value]="s">{{ s }}</option>
+              }
+            </select>
+            <input
+              type="text"
+              class="delivery-note-input"
+              placeholder="Delivery note for customer…"
+              [ngModel]="o.deliveryNote"
+              (blur)="onNoteBlur(o, $any($event.target).value)"
+            />
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
