@@ -45,6 +45,12 @@ function validateEnv() {
     );
     process.exit(1);
   }
+  const cloudinaryKeys = ["CLOUDINARY_CLOUD_NAME", "CLOUDINARY_API_KEY", "CLOUDINARY_API_SECRET"];
+  for (const key of cloudinaryKeys) {
+    if (!process.env[key]) {
+      problems.push(`${key} is not set — image uploads will fail without it.`);
+    }
+  }
 }
 
 module.exports = validateEnv;
