@@ -3,7 +3,7 @@ import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../core/services/product.service';
 import { Product } from '../../core/models/product.model';
-import { CATEGORIES } from '../../shared/config/site.config';
+import { CATEGORIES ,siteConfig  } from '../../shared/config/site.config';
 import { formatPrice, resolveImageUrl } from '../../shared/config/site.config';
 
 @Component({
@@ -20,6 +20,7 @@ export class HomeComponent {
   products = signal<Product[]>([]);
   loading = signal(true);
   error = signal<string | null>(null);
+  siteConfig = siteConfig;
 
   selectedCategory = signal<string>('');
   sort = signal<'' | 'price-asc' | 'price-desc' | 'newest'>('');

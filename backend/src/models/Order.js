@@ -28,6 +28,7 @@ const orderSchema = new mongoose.Schema(
     phone: { type: String, required: true, trim: true, index: true },
     address: { type: String, required: true, trim: true, minlength: 10, maxlength: 500 },
     note: { type: String, trim: true, maxlength: 1000 },
+    
     items: {
       type: [orderItemSchema],
       required: true,

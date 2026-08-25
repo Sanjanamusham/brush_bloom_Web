@@ -33,8 +33,8 @@ describe("GET /api/products", () => {
 
   it("filters by category", async () => {
     await makeProduct({ slug: "a", category: "Wall Décor" });
-    await makeProduct({ slug: "b", category: "Wall Clocks" });
-    const res = await request(app).get("/api/products?category=Wall Clocks");
+    await makeProduct({ slug: "b", category: "Mirror Frames" });
+    const res = await request(app).get("/api/products?category=Mirror Frames");
     expect(res.body.data).toHaveLength(1);
     expect(res.body.data[0].slug).toBe("b");
   });

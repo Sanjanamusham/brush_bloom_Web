@@ -2,10 +2,13 @@ const cloudinary = require("../config/cloudinary");
 const ApiError = require("../utils/ApiError");
 const asyncHandler = require("../utils/asyncHandler");
 
+const CLOUDINARY_FOLDER =
+  process.env.NODE_ENV === "production" ? "brush-bloom-products" : "brush-bloom-products-dev";
+
 function uploadBufferToCloudinary(buffer) {
   return new Promise((resolve, reject) => {
     const stream = cloudinary.uploader.upload_stream(
-      { folder: "brush-bloom-products", resource_type: "image" },
+      { folder: CLOUDINARY_FOLDER, resource_type: "image" },
       (error, result) => {
         if (error) return reject(error);
         resolve(result);

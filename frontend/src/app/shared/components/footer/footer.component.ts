@@ -1,17 +1,28 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { siteConfig, whatsappLink } from '../../config/site.config';
 
 @Component({
   selector: 'app-footer',
   standalone: true,
+  imports: [RouterLink],
   template: `
     <footer class="section-warm">
       <div class="container foot">
-        <div>
+        <div class="brand-col">
           <h3>{{ siteConfig.name }}</h3>
-          <p class="muted">{{ siteConfig.tagline }}</p>
+          <p class="muted">{{ siteConfig.footerDescription }}</p>
         </div>
-        <div class="links">
+
+        <div class="nav-col">
+          <h4>Explore</h4>
+          <a routerLink="/">Shop all pieces</a>
+          <a routerLink="/track">Track your order</a>
+          <a routerLink="/about">About &amp; contact</a>
+        </div>
+
+        <div class="contact-col">
+          <h4>Get in touch</h4>
           <a class="link-row" [href]="whatsapp" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
             <span class="icon-badge">
               <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -19,7 +30,7 @@ import { siteConfig, whatsappLink } from '../../config/site.config';
                 <path d="M12.002 2C6.478 2 2 6.477 2 12c0 1.926.55 3.72 1.5 5.246L2 22l4.918-1.464A9.94 9.94 0 0 0 12.002 22C17.526 22 22 17.523 22 12S17.526 2 12.002 2zm0 18.2a8.19 8.19 0 0 1-4.19-1.153l-.3-.179-3.108.925.933-3.032-.196-.31A8.19 8.19 0 1 1 20.19 12a8.198 8.198 0 0 1-8.188 8.2z"/>
               </svg>
             </span>
-            <span>WhatsApp</span>
+            <span>WhatsApp us</span>
           </a>
           <a class="link-row" [href]="siteConfig.instagram" target="_blank" rel="noopener" aria-label="Follow on Instagram">
             <span class="icon-badge">
@@ -29,7 +40,7 @@ import { siteConfig, whatsappLink } from '../../config/site.config';
                 <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
               </svg>
             </span>
-            <span>Instagram</span>
+            <span>{{ siteConfig.instagramHandle }}</span>
           </a>
           <a class="link-row" [href]="'mailto:' + siteConfig.email" aria-label="Email us">
             <span class="icon-badge">
@@ -42,15 +53,40 @@ import { siteConfig, whatsappLink } from '../../config/site.config';
           </a>
         </div>
       </div>
-      <p class="muted small container">© {{ year }} {{ siteConfig.name }}. All rights reserved.</p>
+
+      <p class="muted small container">
+        © {{ year }} {{ siteConfig.name }}. Prices and delivery are confirmed personally over
+        WhatsApp — no payment is taken on this website.
+      </p>
     </footer>
   `,
   styles: [`
-    footer { padding: 40px 0 20px; margin-top: 60px; }
-    .foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 24px; padding-bottom: 20px; }
-    .links { display: flex; flex-direction: column; gap: 12px; }
+    footer { padding: 48px 0 20px; margin-top: 60px; }
+    .foot {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr;
+      gap: 32px;
+      padding-bottom: 28px;
+    }
     .muted { color: var(--color-muted); }
-    .small { font-size: 0.8rem; }
+    .small { font-size: 0.8rem; padding-bottom: 4px; }
+
+    .brand-col h3 { margin-bottom: 10px; }
+    .brand-col p { max-width: 320px; line-height: 1.6; }
+
+    h4 {
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 14px;
+    }
+
+    .nav-col { display: flex; flex-direction: column; gap: 10px; }
+    .nav-col a { color: var(--color-text); width: fit-content; }
+    .nav-col a:hover { color: var(--color-primary); }
+
+    .contact-col { display: flex; flex-direction: column; gap: 12px; }
 
     .link-row {
       display: inline-flex;
@@ -86,6 +122,10 @@ import { siteConfig, whatsappLink } from '../../config/site.config';
     .link-row:active .icon-badge {
       transform: translateY(-1px) scale(0.95);
       transition-duration: 0.08s;
+    }
+
+    @media (max-width: 760px) {
+      .foot { grid-template-columns: 1fr; }
     }
   `],
 })

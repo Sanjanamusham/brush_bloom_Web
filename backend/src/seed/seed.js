@@ -56,18 +56,7 @@ const products = [
     featured: true,
     sortOrder: 3,
   },
-  {
-    slug: "camel-caravan-wall-clock",
-    name: "Camel Caravan Wall Clock",
-    description:
-      "A working wall clock with a camel caravan crossing a mirrored desert. Silent sweep movement, battery operated.",
-    price: 3600,
-    dimensions: "12 inches diameter",
-    category: "Wall Clocks",
-    images: ["/assets/products/camel-clock.jpg"],
-    featured: false,
-    sortOrder: 4,
-  },
+
   {
     slug: "toran-arch-wall-hanging",
     name: "Toran Arch Wall Hanging",
@@ -91,18 +80,6 @@ const products = [
     images: ["/assets/products/lotus-mirror.jpg"],
     featured: false,
     sortOrder: 6,
-  },
-  {
-    slug: "rann-sunrise-wall-clock",
-    name: "Rann Sunrise Wall Clock",
-    description:
-      "A sunrise over the white Rann rendered in clay and mirror, built around a quiet quartz clock movement.",
-    price: 3900,
-    dimensions: "14 inches diameter",
-    category: "Wall Clocks",
-    images: ["/assets/products/rann-clock.jpg"],
-    featured: false,
-    sortOrder: 7,
   },
   {
     slug: "custom-name-plate",

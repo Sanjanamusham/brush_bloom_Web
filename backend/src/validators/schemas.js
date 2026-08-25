@@ -44,7 +44,7 @@ const productSchema = z.object({
   price: z.number().min(0).max(10_000_000),
   currency: z.string().optional(),
   dimensions: z.string().transform(clean).pipe(z.string().max(120)).optional().or(z.literal("")),
-  category: z.enum(["Wall Décor", "Mirror Frames", "Wall Clocks", "Custom Orders"]),
+  category: z.enum(["Wall Décor", "Mirror Frames", "Custom Orders"]),
   images: z.array(z.string().transform(clean).pipe(z.string().min(1).max(500))).max(8).default([]),
   inStock: z.boolean().default(true),
   featured: z.boolean().default(false),

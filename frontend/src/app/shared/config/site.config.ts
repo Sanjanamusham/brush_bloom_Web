@@ -11,6 +11,8 @@ export const siteConfig = {
   tagline: 'Handcrafted Lippan art from the heart of Kutch',
   description:
     'Shop handcrafted Lippan art and mirror-work wall décor. Discover unique traditional Indian designs made to bring warmth, beauty, and character to your space.',
+    footerDescription:
+    'Handcrafted Lippan art from the heart of Kutch. Every piece is shaped, mirrored and finished by hand.',
 
   /** Full international number, digits only, no + or spaces. Edit this one line. */
   whatsappNumber: '919505905090',
@@ -22,7 +24,7 @@ export const siteConfig = {
   currency: 'INR',
 } as const;
 
-export const CATEGORIES = ['Wall Décor', 'Mirror Frames', 'Wall Clocks', 'Custom Orders'] as const;
+export const CATEGORIES = ['Wall Décor', 'Mirror Frames', 'Custom Orders'] as const;
 export type Category = (typeof CATEGORIES)[number];
 
 export const ORDER_STATUSES = [

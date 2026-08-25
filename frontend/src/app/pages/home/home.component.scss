@@ -38,3 +38,28 @@
 }
 
 .error { color: #b3261e; }
+
+.how-it-works { padding: 48px 0 64px; text-align: center; }
+.how-it-works h2 { margin-bottom: 36px; }
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  text-align: left;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.step-number {
+  display: block;
+  font-family: var(--font-heading);
+  font-style: italic;
+  color: var(--color-accent);
+  font-size: 1.1rem;
+  margin-bottom: 6px;
+}
+.step h3 { font-size: 1.05rem; margin: 0 0 6px; }
+.step p { font-size: 0.9rem; margin: 0; }
+
+@media (max-width: 700px) {
+  .steps { grid-template-columns: 1fr; }
+}

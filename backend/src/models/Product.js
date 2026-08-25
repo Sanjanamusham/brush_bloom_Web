@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const CATEGORIES = ["Wall Décor", "Mirror Frames", "Wall Clocks", "Custom Orders"];
+const CATEGORIES = ["Wall Décor", "Mirror Frames", "Custom Orders"];
 
 const productSchema = new mongoose.Schema(
   {

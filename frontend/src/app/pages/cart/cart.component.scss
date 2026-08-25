@@ -1,4 +1,6 @@
 .cart-page { padding: 40px 0 80px; }
+.cart-page > * { max-width: 720px; margin-left: auto; margin-right: auto; }
+
 .lines { display: flex; flex-direction: column; gap: 16px; margin: 24px 0; }
 .line {
   display: grid;
@@ -15,12 +17,14 @@
 .qty-controls { display: flex; align-items: center; gap: 8px; }
 .remove-btn { background: none; border: none; color: var(--color-muted); cursor: pointer; text-decoration: underline; }
 
-.summary { max-width: 420px; margin-left: auto; padding: 20px; border: 1px solid var(--color-border); border-radius: var(--radius); }
+.summary { padding: 20px; border: 1px solid var(--color-border); border-radius: var(--radius); background: var(--color-bg-warm); }
 .subtotal { font-size: 1.1rem; }
 .small { font-size: 0.8rem; margin-bottom: 16px; }
 
 .order-form { margin-top: 16px; }
 .order-form button { width: 100%; }
 
-.success { padding: 60px 20px; }
+.empty-state { text-align: center; }
+
+.success { padding: 60px 20px; text-align: center; }
 .order-code { font-size: 1.8rem; font-weight: 700; color: var(--color-primary); letter-spacing: 1px; }
