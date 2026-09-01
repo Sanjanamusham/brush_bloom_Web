@@ -18,11 +18,24 @@ const orderItemSchema = z.object({
   quantity: z.number().int().min(1).max(50),
 });
 
+const pincodeSchema = z
+  .string()
+  .transform(clean)
+  .refine((v) => /^[1-9][0-9]{5}$/.test(v), {
+    message: "Enter a valid 6-digit PIN code",
+  });
+
 const orderRequestSchema = z.object({
   customerName: z.string().transform(clean).pipe(z.string().min(2).max(100)),
   phone: phoneSchema,
-  address: z.string().transform(clean).pipe(z.string().min(10).max(500)),
+  addressLine1: z.string().transform(clean).pipe(z.string().min(5).max(200)),
+  landmark: z.string().transform(clean).pipe(z.string().max(150)).optional().or(z.literal("")),
+  city: z.string().transform(clean).pipe(z.string().min(2).max(100)),
+  state: z.string().transform(clean).pipe(z.string().min(2).max(100)),
+  pincode: pincodeSchema,
   note: z.string().transform(clean).pipe(z.string().max(1000)).optional().or(z.literal("")),
+  referenceImages: z.array(z.string().url().max(500)).max(3).optional().default([]),
+  referenceLink: z.string().transform(clean).pipe(z.string().url().max(500)).optional().or(z.literal("")),
   items: z.array(orderItemSchema).min(1).max(50),
 });
 

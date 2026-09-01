@@ -23,12 +23,24 @@ const orderItemSchema = new mongoose.Schema(
 const orderSchema = new mongoose.Schema(
   {
     orderCode: { type: String, required: true, unique: true, index: true },
-    customerName: { type: String, required: true, trim: true, minlength: 2, maxlength: 100 },
+    customerName: { type: String, required: true, trim: true, minlength: 2, maxlength: 75 },
     // Stored normalized (digits only) so tracking lookups are exact-match and index-friendly.
     phone: { type: String, required: true, trim: true, index: true },
     address: { type: String, required: true, trim: true, minlength: 10, maxlength: 500 },
+    pincode: {
+      type: String,
+      required: true,
+      trim: true,
+      match: [/^[1-9][0-9]{5}$/, "Invalid PIN code"],
+    },
     note: { type: String, trim: true, maxlength: 1000 },
-    
+    referenceImages: {
+      type: [String],
+      default: [],
+      validate: [(v) => v.length <= 3, "Maximum 3 reference images"],
+    },
+    referenceLink: { type: String, default: null, trim: true, maxlength: 500 },
+
     items: {
       type: [orderItemSchema],
       required: true,

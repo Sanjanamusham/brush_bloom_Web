@@ -6,8 +6,14 @@ export interface OrderItemInput {
 export interface OrderRequest {
   customerName: string;
   phone: string;
-  address: string;
+  addressLine1: string;
+  landmark?: string;
+  city: string;
+  state: string;
+  pincode: string;
   note?: string;
+  referenceImages?: string[];
+  referenceLink?: string;
   items: OrderItemInput[];
 }
 

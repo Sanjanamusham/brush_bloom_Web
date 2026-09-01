@@ -39,15 +39,16 @@ describe("POST /api/orders", () => {
   });
 
   it("creates an order and returns a generated order code", async () => {
-    const product = await makeProduct();
-    const res = await request(app)
-      .post("/api/orders")
-      .send({
-        customerName: "Jane Doe",
-        phone: "9876543210",
-        address: "123 Long Enough Address Street",
-        items: [{ productId: product.id, quantity: 2 }],
-      });
+   const product = await makeProduct();
+  const res = await request(app)
+    .post("/api/orders")
+    .send({
+      customerName: "Jane Doe",
+      phone: "9876543210",
+      addressLine1: "123 Long Enough Address Street", city: "Hyderabad", state: "Telangana", pincode: "500081",
+      items: [{ productId: product.id, quantity: 2 }],
+    });
+
     expect(res.status).toBe(201);
     expect(res.body.data.orderCode).toMatch(/^LP-\d{8}-\d{4}$/);
     expect(res.body.data.estimatedTotal).toBe(3000); // 1500 x 2
@@ -55,18 +56,28 @@ describe("POST /api/orders", () => {
 });
 
 describe("POST /api/orders/track — security-critical: never leaks orders by code alone", () => {
-  async function createOrder(phone = "9876543210") {
-    const product = await makeProduct();
-    const createRes = await request(app)
-      .post("/api/orders")
-      .send({
-        customerName: "Jane Doe",
-        phone,
-        address: "123 Long Enough Address Street",
-        items: [{ productId: product.id, quantity: 1 }],
-      });
-    return createRes.body.data.orderCode;
+async function createOrder(phone = "9876543210") {
+  const product = await makeProduct();
+  const createRes = await request(app)
+    .post("/api/orders")
+    .send({
+      customerName: "Jane Doe",
+      phone,
+      addressLine1: "123 Long Enough Address Street",
+      city: "Hyderabad",
+      state: "Telangana",
+      pincode: "500081",
+      items: [{ productId: product.id, quantity: 1 }],
+    });
+
+  if (createRes.status !== 201) {
+    throw new Error(
+      `createOrder() helper expected 201 but got ${createRes.status}: ${JSON.stringify(createRes.body)}`,
+    );
   }
+
+  return createRes.body.data.orderCode;
+}
 
   it("finds the order when both order code AND phone match", async () => {
     const orderCode = await createOrder("9876543210");

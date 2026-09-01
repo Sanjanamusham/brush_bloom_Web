@@ -7,7 +7,15 @@ const { normalizePhone } = require("../validators/schemas");
 
 // POST /api/orders — public. Creates an order request (no payment collected here).
 exports.createOrder = asyncHandler(async (req, res) => {
-  const { customerName, phone, address, note, items } = req.body;
+  const { customerName, phone, addressLine1, landmark, city, state, pincode, note, referenceImages, referenceLink, items } =
+    req.body;
+
+  // Composed once, server-side, from individually-validated parts — the free-text
+  // "address" stored on the order is never accepted directly from the client.
+  const addressParts = [addressLine1];
+  if (landmark) addressParts.push(landmark);
+  addressParts.push(city, state);
+  const address = `${addressParts.join(", ")} - ${pincode}`;
 
   const ids = [...new Set(items.map((i) => i.productId))];
   const products = await Product.find({ _id: { $in: ids } });
@@ -37,7 +45,10 @@ exports.createOrder = asyncHandler(async (req, res) => {
     customerName,
     phone: normalizePhone(phone),
     address,
+    pincode,
     note: note || undefined,
+    referenceImages: referenceImages || [],
+    referenceLink: referenceLink || undefined,
     items: priced,
     estimatedTotal,
     status: "Pending Confirmation",

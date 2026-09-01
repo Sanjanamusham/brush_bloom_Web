@@ -26,5 +26,21 @@
 
 .empty-state { text-align: center; }
 
+.field-row { display: flex; gap: 16px; }
+.field-row .field { flex: 1; }
+
 .success { padding: 60px 20px; text-align: center; }
 .order-code { font-size: 1.8rem; font-weight: 700; color: var(--color-primary); letter-spacing: 1px; }
+
+.reference-previews { display: flex; gap: 8px; margin-bottom: 6px; }
+.reference-thumb { position: relative; width: 64px; height: 64px; border-radius: 8px; overflow: hidden; border: 1px solid var(--color-border); }
+.reference-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.remove-thumb {
+  position: absolute; top: 2px; right: 2px; width: 18px; height: 18px; border-radius: 50%;
+  background: rgba(0,0,0,0.6); color: #fff; border: none; font-size: 12px; line-height: 1; cursor: pointer;
+}
+.add-reference {
+  width: 64px; height: 64px; border-radius: 8px; border: 1px dashed var(--color-accent);
+  display: flex; align-items: center; justify-content: center; color: var(--color-accent);
+  font-size: 22px; cursor: pointer; background: #fff;
+}
