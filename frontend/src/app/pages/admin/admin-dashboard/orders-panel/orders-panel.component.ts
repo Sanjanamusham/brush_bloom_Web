@@ -41,21 +41,24 @@ export class OrdersPanelComponent {
       });
   }
 
-  onStatusChange(order: AdminOrder, newStatus: string): void {
-    this.savingId.set(order.id);
-    this.admin.updateOrderStatus(order.id, newStatus, order.deliveryNote).subscribe({
-      next: (updated) => {
-        this.orders.set(this.orders().map((o) => (o.id === updated.id ? updated : o)));
-        this.savingId.set(null);
-      },
-      error: () => this.savingId.set(null),
-    });
-  }
+ onStatusChange(order: AdminOrder, newStatus: string): void {
+  this.savingId.set(order.id);
+  this.admin.updateOrderStatus(order.id, newStatus, order.deliveryNote).subscribe({
+    next: ({ order: updated, whatsappConfirmUrl }) => {
+      this.orders.set(this.orders().map((o) => (o.id === updated.id ? updated : o)));
+      this.savingId.set(null);
+      if (whatsappConfirmUrl) {
+        window.open(whatsappConfirmUrl, '_blank');
+      }
+    },
+    error: () => this.savingId.set(null),
+  });
+}
 
   onNoteBlur(order: AdminOrder, note: string): void {
     if (note === (order.deliveryNote || '')) return;
     this.admin.updateOrderStatus(order.id, order.status, note).subscribe({
-      next: (updated) => {
+      next: ({ order: updated }) => {
         this.orders.set(this.orders().map((o) => (o.id === updated.id ? updated : o)));
       },
     });

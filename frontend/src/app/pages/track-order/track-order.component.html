@@ -7,14 +7,14 @@
       <label>Order ID</label>
       <input type="text" formControlName="orderCode" placeholder="LP-20260817-0001" />
       @if (form.controls.orderCode.touched && form.controls.orderCode.invalid) {
-        <span class="error">Order ID is required.</span>
+      <span class="error">Order ID is required.</span>
       }
     </div>
     <div class="field">
       <label>Phone Number</label>
       <input type="tel" formControlName="phone" placeholder="e.g. 9876543210" />
       @if (form.controls.phone.touched && form.controls.phone.invalid) {
-        <span class="error">Enter a valid phone number.</span>
+      <span class="error">Enter a valid phone number.</span>
       }
     </div>
     <button type="submit" class="btn" [disabled]="loading()">
@@ -23,34 +23,41 @@
   </form>
 
   @if (searched()) {
-    @if (order(); as o) {
-      <div class="card result">
-        <div class="result-header">
-          <h3>{{ o.orderCode }}</h3>
-          <span class="badge status">{{ o.status }}</span>
-        </div>
-        <p class="muted">Placed on {{ o.createdAt | date: 'mediumDate' }}</p>
+  @if (order(); as o) {
+  <div class="card result">
+    <div class="result-header">
+      <h3>{{ o.orderCode }}</h3>
+      <span class="badge status">{{ o.status }}</span>
+    </div>
+    <p class="muted">Placed on {{ o.createdAt | date: 'mediumDate' }}</p>
 
-        <ul class="items">
-          @for (item of o.items; track item.name) {
-            <li>{{ item.name }} × {{ item.quantity }} — {{ formatPrice(item.unitPrice * item.quantity) }}</li>
-          }
-        </ul>
+    <ul class="items">
+      @for (item of o.items; track item.name) {
+      <li>{{ item.name }} × {{ item.quantity }} — {{ formatPrice(item.unitPrice * item.quantity) }}</li>
+      }
+    </ul>
 
-        <p class="price">Estimated total: {{ formatPrice(o.estimatedTotal) }}</p>
+    <p class="price">Estimated total: {{ formatPrice(o.estimatedTotal) }}</p>
 
-        @if (o.deliveryNote) {
-          <div class="delivery-note">
-            <strong>Note from us:</strong>
-            <p>{{ o.deliveryNote }}</p>
-          </div>
-        }
-      </div>
-    } @else {
-      <div class="empty-state">
-        <h3>We couldn't find that order</h3>
-        <p class="muted">Please check your Order ID and phone number and try again.</p>
-      </div>
+    @if (o.deliveryNote) {
+    <div class="delivery-note">
+      <strong>Note from us:</strong>
+      <p>{{ o.deliveryNote }}</p>
+    </div>
     }
+    @if (o.status === 'Pending Confirmation') {
+    <button type="button" class="btn btn-outline" [disabled]="cancelling()" (click)="cancelOrder()">
+      {{ cancelling() ? 'Cancelling…' : 'Cancel Order' }}
+    </button>
+    } @else if (o.status !== 'Cancelled') {
+    <p class="muted small">This order has been confirmed and can no longer be cancelled here.</p>
+    }
+  </div>
+  } @else {
+  <div class="empty-state">
+    <h3>We couldn't find that order</h3>
+    <p class="muted">Please check your Order ID and phone number and try again.</p>
+  </div>
+  }
   }
 </div>

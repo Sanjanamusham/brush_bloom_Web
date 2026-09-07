@@ -115,6 +115,23 @@
         }
       </div>
       <div class="field">
+  <label>How should we confirm your order?</label>
+  <select formControlName="contactPreference">
+    <option value="whatsapp">WhatsApp</option>
+    <option value="email">Email</option>
+  </select>
+</div>
+
+@if (form.controls.contactPreference.value === 'email') {
+  <div class="field">
+    <label>Email address</label>
+    <input type="email" formControlName="customerEmail" placeholder="you@example.com" />
+    @if (form.controls.customerEmail.touched && form.controls.customerEmail.invalid) {
+      <span class="error">Enter a valid email address.</span>
+    }
+  </div>
+}
+      <div class="field">
         <label>Note (optional)</label>
         <textarea rows="2" formControlName="note"></textarea>
       </div>

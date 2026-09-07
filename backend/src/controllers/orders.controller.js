@@ -4,6 +4,7 @@ const ApiError = require("../utils/ApiError");
 const asyncHandler = require("../utils/asyncHandler");
 const generateOrderCode = require("../utils/orderCode");
 const { normalizePhone } = require("../validators/schemas");
+const { sendOrderConfirmedEmail } = require("../utils/email");
 
 // POST /api/orders — public. Creates an order request (no payment collected here).
 exports.createOrder = asyncHandler(async (req, res) => {
@@ -123,11 +124,47 @@ exports.getOrderAdmin = asyncHandler(async (req, res) => {
 // PATCH /api/admin/orders/:id/status — admin only
 exports.updateOrderStatus = asyncHandler(async (req, res) => {
   const { status, deliveryNote } = req.body;
+  const previous = await Order.findById(req.params.id);
+  if (!previous) throw new ApiError(404, "Order not found");
+
   const order = await Order.findByIdAndUpdate(
     req.params.id,
     { status, ...(deliveryNote !== undefined ? { deliveryNote } : {}) },
     { new: true, runValidators: true },
   );
-  if (!order) throw new ApiError(404, "Order not found");
-  res.json({ success: true, data: order });
+
+  let whatsappConfirmUrl = null;
+
+  if (status === "Confirmed" && previous.status !== "Confirmed") {
+    if (order.contactPreference === "email" && order.customerEmail) {
+      await sendOrderConfirmedEmail(order.customerEmail, order);
+    } else {
+      const message = `Hi ${order.customerName}, your order ${order.orderCode} with Brush Bloom Handmade has been confirmed! Estimated total: Rs.${order.estimatedTotal}. Thank you for shopping with us.`;
+      whatsappConfirmUrl = `https://wa.me/${order.phone}?text=${encodeURIComponent(message)}`;
+    }
+  }
+
+  res.json({ success: true, data: order, whatsappConfirmUrl });
+});
+
+exports.cancelOrder = asyncHandler(async (req, res) => {
+  const { orderCode, phone } = req.body;
+  const normalizedPhone = normalizePhone(phone);
+
+  const order = await Order.findOne({ orderCode });
+  if (!order || normalizePhone(order.phone) !== normalizedPhone) {
+    throw new ApiError(404, "Order not found");
+  }
+
+  if (order.status !== "Pending Confirmation") {
+    throw new ApiError(
+      409,
+      "This order has already been confirmed and can no longer be cancelled here. Please message us on WhatsApp.",
+    );
+  }
+
+  order.status = "Cancelled";
+  await order.save();
+
+  res.json({ success: true, data: { orderCode: order.orderCode, status: order.status } });
 });

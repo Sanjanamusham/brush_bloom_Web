@@ -37,4 +37,27 @@ async function sendPasswordResetEmail(toEmail, resetUrl) {
   });
 }
 
-module.exports = { sendPasswordResetEmail };
+async function sendOrderConfirmedEmail(toEmail, order) {
+  const transporter = getTransporter();
+  const subject = `Your order ${order.orderCode} is confirmed — Brush Bloom Handmade`;
+  const text = `Good news! Your order ${order.orderCode} has been confirmed.\n\nEstimated total: ₹${order.estimatedTotal}\n\nWe'll be in touch about delivery. Thank you for shopping with Brush Bloom Handmade.`;
+
+  if (!transporter) {
+    console.log("\n=== ORDER CONFIRMATION EMAIL (SMTP not configured) ===");
+    console.log(`To: ${toEmail}`);
+    console.log(text);
+    console.log("========================================================\n");
+    return;
+  }
+
+  await transporter.sendMail({
+    from: process.env.SMTP_FROM || process.env.SMTP_USER,
+    to: toEmail,
+    subject,
+    text,
+  });
+}
+
+module.exports = { sendPasswordResetEmail, sendOrderConfirmedEmail };
+
+

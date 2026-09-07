@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { OrderService } from '../../core/services/order.service';
 import { TrackedOrder } from '../../core/models/order.model';
 import { formatPrice } from '../../shared/config/site.config';
+import { ToastService } from '../../core/services/toast.service';
 
 @Component({
   selector: 'app-track-order',
@@ -15,6 +16,8 @@ import { formatPrice } from '../../shared/config/site.config';
 export class TrackOrderComponent {
   private fb = inject(FormBuilder);
   private orderService = inject(OrderService);
+  private toast = inject(ToastService);
+ cancelling = signal(false);
 
   formatPrice = formatPrice;
   loading = signal(false);
@@ -47,4 +50,22 @@ export class TrackOrderComponent {
       },
     });
   }
+
+  cancelOrder(): void {
+  const o = this.order();
+  if (!o) return;
+  this.cancelling.set(true);
+  const { orderCode, phone } = this.form.getRawValue();
+  this.orderService.cancel(orderCode, phone).subscribe({
+    next: () => {
+      this.order.set({ ...o, status: 'Cancelled' });
+      this.toast.success('Order cancelled.');
+      this.cancelling.set(false);
+    },
+    error: (err) => {
+      this.toast.error(err?.error?.message || 'Could not cancel this order.');
+      this.cancelling.set(false);
+    },
+  });
+}
 }

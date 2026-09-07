@@ -67,9 +67,12 @@ export class AdminService {
       .pipe(map((r) => r.data));
   }
 
-  updateOrderStatus(id: string, status: string, deliveryNote?: string): Observable<AdminOrder> {
-    return this.http
-      .patch<ApiResponse<AdminOrder>>(`${this.base}/orders/${id}/status`, { status, deliveryNote })
-      .pipe(map((r) => r.data));
-  }
+ updateOrderStatus(id: string, status: string, deliveryNote?: string): Observable<{ order: AdminOrder; whatsappConfirmUrl: string | null }> {
+  return this.http
+    .patch<{ success: boolean; data: AdminOrder; whatsappConfirmUrl: string | null }>(
+      `${this.base}/orders/${id}/status`,
+      { status, deliveryNote },
+    )
+    .pipe(map((r) => ({ order: r.data, whatsappConfirmUrl: r.whatsappConfirmUrl })));
+}
 }

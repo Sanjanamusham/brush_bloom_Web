@@ -1,5 +1,6 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { Product } from '../models/product.model';
+import { ToastService } from './toast.service';
 
 export interface CartLine {
   productId: string;
@@ -14,6 +15,7 @@ const STORAGE_KEY = 'brush-bloom-cart';
 
 @Injectable({ providedIn: 'root' })
 export class CartService {
+  private toast = inject(ToastService);
   private linesSignal = signal<CartLine[]>(this.loadFromStorage());
 
   readonly lines = this.linesSignal.asReadonly();
@@ -37,7 +39,9 @@ export class CartService {
         quantity: Math.min(quantity, 50),
       });
     }
+    this.toast.success(`Added "${product.name}" to cart`);
     this.set(lines);
+    
   }
 
   updateQuantity(productId: string, quantity: number): void {
@@ -50,6 +54,7 @@ export class CartService {
 
   remove(productId: string): void {
     this.set(this.linesSignal().filter((l) => l.productId !== productId));
+    
   }
 
   clear(): void {

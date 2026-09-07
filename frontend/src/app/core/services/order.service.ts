@@ -28,4 +28,9 @@ export class OrderService {
     .post<ApiResponse<{ urls: string[] }>>(`${this.base}/reference-upload`, formData)
     .pipe(map((r) => r.data));
 }
+cancel(orderCode: string, phone: string): Observable<{ orderCode: string; status: string }> {
+  return this.http
+    .post<ApiResponse<{ orderCode: string; status: string }>>(`${this.base}/cancel`, { orderCode, phone })
+    .pipe(map((r) => r.data));
+}
 }

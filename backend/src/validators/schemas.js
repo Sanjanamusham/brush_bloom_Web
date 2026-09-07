@@ -37,7 +37,12 @@ const orderRequestSchema = z.object({
   referenceImages: z.array(z.string().url().max(500)).max(3).optional().default([]),
   referenceLink: z.string().transform(clean).pipe(z.string().url().max(500)).optional().or(z.literal("")),
   items: z.array(orderItemSchema).min(1).max(50),
-});
+  contactPreference: z.enum(["whatsapp", "email"]).default("whatsapp"),
+ customerEmail: z.string().email().optional().or(z.literal(""))
+}).refine(
+  (data) => data.contactPreference !== "email" || (data.customerEmail && data.customerEmail.length > 0),
+  { message: "Email is required when email is your preferred contact method", path: ["customerEmail"] },
+);
 
 const trackOrderSchema = z.object({
   orderCode: z

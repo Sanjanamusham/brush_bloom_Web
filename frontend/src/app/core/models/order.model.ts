@@ -15,6 +15,8 @@ export interface OrderRequest {
   referenceImages?: string[];
   referenceLink?: string;
   items: OrderItemInput[];
+  contactPreference: 'whatsapp' | 'email';
+  customerEmail?: string; 
 }
 
 export interface OrderCreatedResult {

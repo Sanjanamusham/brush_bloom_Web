@@ -56,6 +56,8 @@ const orderSchema = new mongoose.Schema(
     paymentProvider: { type: String, default: null },
     paymentReference: { type: String, default: null },
     paidAt: { type: Date, default: null },
+    contactPreference: { type: String, enum: ["whatsapp", "email"], default: "whatsapp" },
+    customerEmail: { type: String, trim: true, lowercase: true, default: null },
 
     // Reserved for future customer accounts; null for today's guest checkout flow.
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "Customer", default: null },
