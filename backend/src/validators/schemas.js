@@ -97,6 +97,17 @@ const orderStatusUpdateSchema = z.object({
   deliveryNote: z.string().transform(clean).pipe(z.string().max(1000)).optional().or(z.literal("")),
 });
 
+const pageViewSchema = z.object({
+  path: z.string().transform(clean).pipe(z.string().min(1).max(300)),
+  sessionId: z.string().transform(clean).pipe(z.string().min(8).max(100)),
+});
+
+const pageViewDurationSchema = z.object({
+  sessionId: z.string().transform(clean).pipe(z.string().min(8).max(100)),
+  path: z.string().transform(clean).pipe(z.string().min(1).max(300)),
+  durationMs: z.number().min(0).max(2 * 60 * 60 * 1000),
+});
+
 module.exports = {
   clean,
   normalizePhone,
@@ -108,4 +119,6 @@ module.exports = {
   forgotPasswordSchema,
   resetPasswordSchema,
   orderStatusUpdateSchema,
+  pageViewDurationSchema,
+  pageViewSchema
 };

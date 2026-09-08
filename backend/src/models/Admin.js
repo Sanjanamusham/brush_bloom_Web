@@ -13,6 +13,8 @@ const adminSchema = new mongoose.Schema(
     // stored — never the raw token — so a database leak alone can't be used to reset a password.
     resetPasswordTokenHash: { type: String, default: null },
     resetPasswordExpires: { type: Date, default: null },
+    failedLoginAttempts: { type: Number, default: 0 },
+    lockUntil: { type: Date, default: null },
   },
   { timestamps: true },
 );

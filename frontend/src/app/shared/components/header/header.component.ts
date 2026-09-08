@@ -10,7 +10,10 @@ import { siteConfig } from '../../config/site.config';
   template: `
     <header class="site-header">
       <div class="container bar">
-        <a routerLink="/" class="brand">{{ siteConfig.name }}</a>
+        <a routerLink="/" class="brand">
+  <img src="assets/android-chrome-192x192.png" alt="{{ siteConfig.name }}" class="brand-logo" />
+  <span>{{ siteConfig.name }}</span>
+</a>
         <nav>
           <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Shop</a>
           <a routerLink="/about" routerLinkActive="active">About</a>
@@ -32,7 +35,8 @@ import { siteConfig } from '../../config/site.config';
   styles: [`
     .site-header { border-bottom: 1px solid var(--color-border); position: sticky; top: 0; background: #fff; z-index: 10; }
     .bar { display: flex; align-items: center; justify-content: space-between; height: 68px; }
-    .brand { font-family: var(--font-heading); font-size: 1.3rem; font-weight: 700; color: var(--color-primary); }
+    .brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-heading); font-size: 1.3rem; font-weight: 700; color: var(--color-primary); }
+.brand-logo { width: 79px; height: 83px; border-radius: 50%; object-fit: cover; }
     nav { display: flex; align-items: center; gap: 24px; font-weight: 500; }
     nav a { color: var(--color-text); padding: 6px 0; border-bottom: 2px solid transparent; }
     nav a.active { color: var(--color-primary); border-color: var(--color-primary); }

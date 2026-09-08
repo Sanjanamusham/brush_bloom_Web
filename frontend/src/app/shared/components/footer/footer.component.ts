@@ -10,7 +10,10 @@ import { siteConfig, whatsappLink } from '../../config/site.config';
     <footer class="section-warm">
       <div class="container foot">
         <div class="brand-col">
-          <h3>{{ siteConfig.name }}</h3>
+          <div class="footer-brand">
+  <img src="assets/android-chrome-192x192.png" alt="{{ siteConfig.name }}" class="footer-logo" />
+  <h3>{{ siteConfig.name }}</h3>
+</div>
           <p class="muted">{{ siteConfig.footerDescription }}</p>
         </div>
 
@@ -70,6 +73,8 @@ import { siteConfig, whatsappLink } from '../../config/site.config';
     }
     .muted { color: var(--color-muted); }
     .small { font-size: 0.8rem; padding-bottom: 4px; }
+    .footer-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.footer-logo { width: 125px; height: 110px; border-radius: 50%; object-fit: cover; }
 
     .brand-col h3 { margin-bottom: 10px; }
     .brand-col p { max-width: 320px; line-height: 1.6; }

@@ -10,6 +10,7 @@ const {
   productUpdateSchema,
   orderStatusUpdateSchema,
 } = require("../validators/schemas");
+const analyticsCtrl = require("../controllers/analytics.controller");
 
 const router = express.Router();
 
@@ -19,6 +20,7 @@ router.get("/products", productsCtrl.listProductsAdmin);
 router.post("/products", validate(productSchema), productsCtrl.createProduct);
 router.patch("/products/:id", validate(productUpdateSchema), productsCtrl.updateProduct);
 router.delete("/products/:id", productsCtrl.deleteProduct);
+router.get("/analytics/summary", analyticsCtrl.getSummary);
 
 router.get("/orders", ordersCtrl.listOrdersAdmin);
 router.get("/orders/:id", ordersCtrl.getOrderAdmin);

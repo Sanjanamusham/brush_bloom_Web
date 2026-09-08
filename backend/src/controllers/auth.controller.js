@@ -31,8 +31,24 @@ exports.login = asyncHandler(async (req, res) => {
   const admin = await Admin.findOne({ email: email.toLowerCase() });
   if (!admin) throw new ApiError(401, "Invalid email or password");
 
+  if (admin.lockUntil && admin.lockUntil > new Date()) {
+    throw new ApiError(429, "Too many failed attempts. Try again in a few minutes.");
+  }
+
   const valid = await admin.comparePassword(password);
-  if (!valid) throw new ApiError(401, "Invalid email or password");
+  if (!valid) {
+    admin.failedLoginAttempts += 1;
+    if (admin.failedLoginAttempts >= 5) {
+      admin.lockUntil = new Date(Date.now() + 15 * 60 * 1000);
+      admin.failedLoginAttempts = 0;
+    }
+    await admin.save();
+    throw new ApiError(401, "Invalid email or password");
+  }
+
+  admin.failedLoginAttempts = 0;
+  admin.lockUntil = null;
+  await admin.save();
 
   const accessToken = signAccessToken(admin);
   const refreshToken = signRefreshToken(admin);

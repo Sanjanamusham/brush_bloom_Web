@@ -16,6 +16,7 @@ const productsRoutes = require("./routes/products.routes");
 const ordersRoutes = require("./routes/orders.routes");
 const authRoutes = require("./routes/auth.routes");
 const adminRoutes = require("./routes/admin.routes");
+const analyticsRoutes = require("./routes/analytics.routes");
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use(mongoSanitizeMiddleware); // strips $ and . operators from req.body/quer
 app.use(hppMiddleware); // guards against HTTP parameter pollution
 app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
 app.use(generalLimiter);
+app.use("/api/analytics", analyticsRoutes);
 
 app.get("/api/health", (req, res) => res.json({ success: true, data: { status: "ok" } }));
 

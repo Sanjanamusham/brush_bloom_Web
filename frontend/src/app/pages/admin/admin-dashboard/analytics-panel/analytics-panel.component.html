@@ -1,0 +1,36 @@
+<div class="panel">
+  @if (loading()) {
+    <p class="muted">Loading analytics…</p>
+  } @else {
+    @if (summary(); as s) {
+      <div class="stat-grid">
+        <div class="stat-card">
+          <span class="stat-value live">{{ s.activeNow }}</span>
+          <span class="stat-label">Active right now</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value">{{ s.viewsToday }}</span>
+          <span class="stat-label">Views today</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value">{{ s.uniqueVisitorsThisWeek }}</span>
+          <span class="stat-label">Unique visitors (7 days)</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value">{{ s.avgSessionSeconds }}s</span>
+          <span class="stat-label">Avg. time on page</span>
+        </div>
+      </div>
+
+      <h3>Top pages (last 7 days)</h3>
+      <div class="top-pages">
+        @for (p of s.topPages; track p.path) {
+          <div class="top-page-row">
+            <span>{{ p.path }}</span>
+            <span class="muted">{{ p.views }} views</span>
+          </div>
+        }
+      </div>
+    }
+  }
+</div>

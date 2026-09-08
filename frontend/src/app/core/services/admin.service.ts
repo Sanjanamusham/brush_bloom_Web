@@ -18,6 +18,14 @@ export interface ProductInput {
   featured: boolean;
   sortOrder: number;
 }
+export interface AnalyticsSummary {
+  viewsToday: number;
+  viewsThisWeek: number;
+  uniqueVisitorsThisWeek: number;
+  activeNow: number;
+  avgSessionSeconds: number;
+  topPages: { path: string; views: number }[];
+}
 
 @Injectable({ providedIn: 'root' })
 export class AdminService {
@@ -36,6 +44,12 @@ export class AdminService {
       .post<ApiResponse<Product>>(`${this.base}/products`, payload)
       .pipe(map((r) => r.data));
   }
+
+  getAnalyticsSummary(): Observable<AnalyticsSummary> {
+  return this.http
+    .get<ApiResponse<AnalyticsSummary>>(`${this.base}/analytics/summary`)
+    .pipe(map((r) => r.data));
+}
 
   updateProduct(id: string, payload: Partial<ProductInput>): Observable<Product> {
     return this.http

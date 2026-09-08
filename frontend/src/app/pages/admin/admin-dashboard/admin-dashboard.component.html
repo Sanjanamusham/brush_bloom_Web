@@ -7,11 +7,14 @@
   <div class="tabs">
     <button type="button" [class.active]="tab() === 'orders'" (click)="tab.set('orders')">Orders</button>
     <button type="button" [class.active]="tab() === 'products'" (click)="tab.set('products')">Products</button>
+    <button type="button" [class.active]="tab() === 'analytics'" (click)="tab.set('analytics')">Analytics</button>
   </div>
 
   @if (tab() === 'orders') {
     <app-orders-panel></app-orders-panel>
-  } @else {
+  } @else if (tab() === 'products') {
     <app-products-panel></app-products-panel>
+  } @else {
+    <app-analytics-panel></app-analytics-panel>
   }
 </div>

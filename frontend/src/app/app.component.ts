@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component , inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { ToastComponent } from './shared/components/toast/toast.component';
 import { ChatbotComponent } from "./shared/components/chatbot/chatbot.component";
+import { AnalyticsService } from './core/services/analytics.service';
 
 @Component({
   selector: 'app-root',
@@ -19,4 +20,9 @@ import { ChatbotComponent } from "./shared/components/chatbot/chatbot.component"
     <app-chatbot></app-chatbot>
   `,
 })
-export class AppComponent {}
+export class AppComponent {
+  private analytics = inject(AnalyticsService);
+  constructor() {
+    this.analytics.init();
+  }
+}
