@@ -116,7 +116,7 @@ Single source of truth, same pattern as the original app:
 - [x] `helmet`, CORS allowlist, `express-mongo-sanitize`, `hpp` on every request
 - [x] No payment/card/UPI data ever collected, stored, or transmitted
 
-## Next steps toward production (do this later, as you said)
+## Next steps toward production 
 
 - Swap `.env` secrets for strong generated values and never commit `.env`
 - Move MongoDB from local Docker to MongoDB Atlas free tier
